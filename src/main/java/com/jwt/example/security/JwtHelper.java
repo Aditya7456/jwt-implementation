@@ -24,7 +24,7 @@ public class JwtHelper {
     }
 
     //    public static final long JWT_TOKEN_VALIDITY =  60;
-    private String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
+    private final String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
     //Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     /*
         When request comes:
@@ -119,8 +119,6 @@ public class JwtHelper {
 
     // Build and sign JWT token with claims, subject, issue date and expiration
     private String doGenerateToken(Map<String, Object> claims, String username) {
-
-        Key key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .setClaims(claims)
