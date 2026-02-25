@@ -17,11 +17,15 @@ import java.util.function.Function;
 @Component
 public class JwtHelper {
     //requirement :
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60;
+
+    private Key getSignKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     //    public static final long JWT_TOKEN_VALIDITY =  60;
     private String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
-    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    //Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     /*
         When request comes:
         Authorization: Bearer eyJhbGciOiJIUzUxMiJ9...
@@ -55,7 +59,7 @@ public class JwtHelper {
     // Parse token and return all claims using secret key
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser() // it parse the jwt token
-                .setSigningKey(secret) // Sets the secret key used to verify signature.
+                .setSigningKey(getSignKey()) // Sets the secret key used to verify signature.
                 .parseClaimsJws(token) // Split token into 3 parts
                 .getBody(); // Returns payload (claims) as a Claims object.
     }
@@ -123,7 +127,7 @@ public class JwtHelper {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(getSignKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
